@@ -1,140 +1,251 @@
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/icon';
-import Navbar from '@/components/Navbar';
 
 const Index = () => {
-  const popularPacks = [
-    { id: 1, uc: '60 UC', price: '₽99', discount: null, popular: false },
-    { id: 2, uc: '325 UC', price: '₽499', discount: '10%', popular: true },
-    { id: 3, uc: '660 UC', price: '₽999', discount: '15%', popular: false },
-    { id: 4, uc: '1800 UC', price: '₽2499', discount: '20%', popular: false },
+  const [playerId, setPlayerId] = useState('');
+  const [selectedPackage, setSelectedPackage] = useState(null);
+
+  const ucPackages = [
+    { id: 1, amount: 60, price: 85, originalPrice: 99, discount: 15, popular: false },
+    { id: 2, amount: 120, price: 169, originalPrice: 189, discount: 11, popular: false },
+    { id: 3, amount: 325, price: 429, originalPrice: 499, discount: 14, popular: true },
+    { id: 4, amount: 660, price: 849, originalPrice: 999, discount: 15, popular: false },
+    { id: 5, amount: 1800, price: 2199, originalPrice: 2599, discount: 15, popular: false },
+    { id: 6, amount: 3850, price: 4499, originalPrice: 5299, discount: 15, popular: false },
+    { id: 7, amount: 8100, price: 8999, originalPrice: 10599, discount: 15, popular: false },
   ];
 
-  const features = [
-    {
-      icon: 'Zap',
-      title: 'Мгновенная выдача',
-      description: 'UC поступают на счет автоматически после оплаты'
-    },
-    {
-      icon: 'Shield',
-      title: 'Безопасно',
-      description: 'Гарантируем безопасность всех транзакций'
-    },
-    {
-      icon: 'Star',
-      title: 'Рейтинг продавцов',
-      description: 'Проверенные продавцы с высокими оценками'
-    },
-    {
-      icon: 'Headphones',
-      title: 'Поддержка 24/7',
-      description: 'Круглосуточная техническая поддержка'
-    }
+  const sellers = [
+    { name: 'UC Master', rating: 4.9, sales: 15240, online: true },
+    { name: 'Game Store', rating: 4.8, sales: 12450, online: true },
+    { name: 'Pro UC', rating: 4.7, sales: 8930, online: true },
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      
-      <div 
-        className="relative min-h-[600px] bg-cover bg-center flex items-center"
-        style={{ backgroundImage: 'url(/img/9abf7a5f-83bb-49f1-a93e-4cfdad7489de.jpg)' }}
-      >
-        <div className="absolute inset-0 bg-black/60"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            Лучший магазин <span className="text-primary">UC PUBG</span>
-          </h1>
-          <p className="text-xl md:text-2xl mb-8 text-gray-200">
-            Быстро, безопасно, выгодно. Автоматическая выдача за секунды!
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="text-lg px-8 py-4">
-              <Icon name="ShoppingCart" size={20} className="mr-2" />
-              Купить UC
-            </Button>
-            <Button variant="outline" size="lg" className="text-lg px-8 py-4 border-white text-white hover:bg-white hover:text-background">
-              <Icon name="Play" size={20} className="mr-2" />
-              Как это работает
+    <div className="min-h-screen bg-background text-foreground">
+      {/* Header */}
+      <header className="border-b border-border bg-card">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+                <span className="text-primary-foreground font-bold text-lg">UC</span>
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-primary">UC STORE</h1>
+                <p className="text-xs text-muted-foreground">PUBG Mobile UC</p>
+              </div>
+            </div>
+            
+            <div className="hidden md:flex items-center space-x-6">
+              <a href="#" className="text-foreground hover:text-primary transition-colors">Главная</a>
+              <a href="#" className="text-foreground hover:text-primary transition-colors">Как купить</a>
+              <a href="#" className="text-foreground hover:text-primary transition-colors">Отзывы</a>
+              <a href="#" className="text-foreground hover:text-primary transition-colors">Поддержка</a>
+            </div>
+            
+            <Button size="sm" className="md:hidden">
+              <Icon name="Menu" size={16} />
             </Button>
           </div>
         </div>
-      </div>
+      </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Популярные пакеты UC</h2>
-          <p className="text-muted-foreground text-lg">Выберите подходящий пакет и получите UC моментально</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-          {popularPacks.map((pack) => (
-            <Card key={pack.id} className={`relative transition-transform hover:scale-105 ${pack.popular ? 'border-primary shadow-lg shadow-primary/20' : ''}`}>
-              {pack.popular && (
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-medium">
-                    ПОПУЛЯРНЫЙ
-                  </span>
-                </div>
-              )}
-              {pack.discount && (
-                <div className="absolute -top-2 -right-2">
-                  <span className="bg-accent text-accent-foreground px-2 py-1 rounded-full text-xs font-bold">
-                    -{pack.discount}
-                  </span>
-                </div>
-              )}
-              <CardHeader className="text-center">
-                <div className="mx-auto mb-4">
-                  <img 
-                    src="/img/900aacb0-b3e6-45f7-863d-6c0b39ff394e.jpg" 
-                    alt="UC" 
-                    className="w-16 h-16 object-cover rounded-full"
+      {/* Hero Section */}
+      <section 
+        className="relative py-20 bg-cover bg-center"
+        style={{ backgroundImage: 'url(/img/ad3aff6d-245d-4337-8a0f-c0485bd205de.jpg)' }}
+      >
+        <div className="absolute inset-0 bg-black/70"></div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="text-center max-w-4xl mx-auto">
+            <h2 className="text-4xl md:text-6xl font-bold mb-4 text-white">
+              Купи UC для <span className="text-primary">PUBG Mobile</span>
+            </h2>
+            <p className="text-xl text-gray-200 mb-8">
+              Быстрая доставка • Лучшие цены • Проверенные продавцы
+            </p>
+            
+            <div className="bg-card/90 backdrop-blur-sm rounded-2xl p-6 max-w-md mx-auto">
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">ID игрока</label>
+                  <Input 
+                    placeholder="Введите ваш ID"
+                    value={playerId}
+                    onChange={(e) => setPlayerId(e.target.value)}
+                    className="bg-background/80"
                   />
                 </div>
-                <CardTitle className="text-2xl">{pack.uc}</CardTitle>
-                <CardDescription className="text-2xl font-bold text-primary">{pack.price}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button className="w-full" size="lg">
-                  <Icon name="Zap" size={16} className="mr-2" />
-                  Купить сейчас
+                <Button 
+                  className="w-full" 
+                  size="lg"
+                  disabled={!playerId}
+                >
+                  <Icon name="Zap" size={20} className="mr-2" />
+                  Начать покупку
                 </Button>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Почему выбирают нас</h2>
-          <p className="text-muted-foreground text-lg mb-12">Преимущества нашего сервиса</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-          {features.map((feature, index) => (
-            <div key={index} className="text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
-                <Icon name={feature.icon as any} size={32} className="text-primary" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-              <p className="text-muted-foreground">{feature.description}</p>
             </div>
-          ))}
+          </div>
         </div>
+      </section>
 
-        <div className="bg-card rounded-2xl p-8 md:p-12 text-center">
-          <h2 className="text-3xl font-bold mb-4">Начните играть прямо сейчас!</h2>
-          <p className="text-muted-foreground text-lg mb-8">
-            Пополните баланс UC и получите доступ ко всем возможностям PUBG Mobile
-          </p>
-          <Button size="lg" className="text-lg px-8 py-4">
-            <Icon name="Rocket" size={20} className="mr-2" />
-            Перейти к покупкам
-          </Button>
+      {/* UC Packages */}
+      <section className="py-16 bg-background">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Выберите пакет UC</h2>
+            <p className="text-muted-foreground text-lg">Лучшие цены на рынке с мгновенной доставкой</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {ucPackages.map((pkg) => (
+              <Card 
+                key={pkg.id} 
+                className={`relative transition-all duration-300 hover:scale-105 cursor-pointer ${
+                  pkg.popular ? 'ring-2 ring-primary shadow-lg shadow-primary/20' : ''
+                } ${
+                  selectedPackage === pkg.id ? 'bg-primary/10 border-primary' : ''
+                }`}
+                onClick={() => setSelectedPackage(pkg.id)}
+              >
+                {pkg.popular && (
+                  <Badge className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-primary text-primary-foreground">
+                    ХИТ ПРОДАЖ
+                  </Badge>
+                )}
+                
+                {pkg.discount > 0 && (
+                  <Badge className="absolute -top-2 -right-2 bg-accent text-accent-foreground">
+                    -{pkg.discount}%
+                  </Badge>
+                )}
+                
+                <CardHeader className="text-center pb-4">
+                  <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center">
+                    <img 
+                      src="/img/ca14ed4e-288a-439c-83d6-a4a5ff8045c0.jpg"
+                      alt="UC"
+                      className="w-12 h-12 rounded-full object-cover"
+                    />
+                  </div>
+                  <h3 className="text-2xl font-bold">{pkg.amount} UC</h3>
+                  <div className="space-y-1">
+                    <div className="text-2xl font-bold text-primary">₽{pkg.price}</div>
+                    {pkg.originalPrice > pkg.price && (
+                      <div className="text-sm text-muted-foreground line-through">
+                        ₽{pkg.originalPrice}
+                      </div>
+                    )}
+                  </div>
+                </CardHeader>
+                
+                <CardContent className="pt-0">
+                  <Button 
+                    className="w-full" 
+                    disabled={!playerId}
+                    variant={selectedPackage === pkg.id ? 'default' : 'outline'}
+                  >
+                    <Icon name="ShoppingCart" size={16} className="mr-2" />
+                    Купить сейчас
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
-      </div>
+      </section>
+
+      {/* Sellers Section */}
+      <section className="py-16 bg-card">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Проверенные продавцы</h2>
+            <p className="text-muted-foreground">Только надежные поставщики с высоким рейтингом</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            {sellers.map((seller, index) => (
+              <Card key={index} className="text-center">
+                <CardContent className="pt-6">
+                  <div className="w-16 h-16 bg-primary/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+                    <Icon name="User" size={32} className="text-primary" />
+                  </div>
+                  
+                  <h3 className="font-semibold text-lg mb-2">{seller.name}</h3>
+                  
+                  <div className="flex items-center justify-center gap-1 mb-2">
+                    <Icon name="Star" size={16} className="text-yellow-400 fill-current" />
+                    <span className="font-medium">{seller.rating}</span>
+                  </div>
+                  
+                  <p className="text-sm text-muted-foreground mb-4">
+                    {seller.sales.toLocaleString()} продаж
+                  </p>
+                  
+                  <Badge variant={seller.online ? 'default' : 'secondary'} className="text-xs">
+                    <div className={`w-2 h-2 rounded-full mr-2 ${seller.online ? 'bg-green-400' : 'bg-gray-400'}`}></div>
+                    {seller.online ? 'Онлайн' : 'Оффлайн'}
+                  </Badge>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Features */}
+      <section className="py-16 bg-background">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-primary/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <Icon name="Zap" size={32} className="text-primary" />
+              </div>
+              <h3 className="font-semibold text-lg mb-2">Мгновенная доставка</h3>
+              <p className="text-muted-foreground">UC поступают на счет за 1-5 минут</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="w-16 h-16 bg-primary/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <Icon name="Shield" size={32} className="text-primary" />
+              </div>
+              <h3 className="font-semibold text-lg mb-2">100% безопасно</h3>
+              <p className="text-muted-foreground">Защищенные платежи и гарантия</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="w-16 h-16 bg-primary/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <Icon name="Headphones" size={32} className="text-primary" />
+              </div>
+              <h3 className="font-semibold text-lg mb-2">Поддержка 24/7</h3>
+              <p className="text-muted-foreground">Всегда готовы помочь в Telegram</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-card border-t border-border py-8">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <div className="flex items-center justify-center space-x-2 mb-4">
+              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                <span className="text-primary-foreground font-bold text-sm">UC</span>
+              </div>
+              <span className="font-bold text-primary">UC STORE</span>
+            </div>
+            <p className="text-muted-foreground text-sm">
+              Лучший магазин UC для PUBG Mobile. Быстро, безопасно, надежно.
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
